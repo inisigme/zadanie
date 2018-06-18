@@ -14,7 +14,7 @@ typedef struct genom {
 class Genetic
 {
 public:
-	const unsigned int pupulationSize = 100;
+	const unsigned int pupulationSize = 20;
 	const unsigned int iterations = 60;
 	std::vector<genom> population = std::vector<genom>(pupulationSize);
 	Mat basicImage;

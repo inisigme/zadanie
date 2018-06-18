@@ -31,8 +31,6 @@ vec2 detectLocation(Mat img) {
 				amount++;
 			}
 	}
-//	std::cout << Xsum << "   *    " << Ysum << "     **    " << amount << std::endl;
-	//std::cout << "Location:   " << (float)Xsum / (float)amount << "  ,  " << (float)Ysum / (float)amount << std::endl;
 	vec2 out{ (float)Xsum / (float)amount , (float)Ysum / (float)amount };
 	return out;
 }
@@ -45,12 +43,9 @@ float znajdzDopasownaie(Mat img1, Mat img2)
 		auto Mi1 = img1.ptr<unsigned char>(i);
 		auto Mi2 = img2.ptr<unsigned char>(i);
 		for (int j = 0; j < img1.cols; j++) {
-			if (Mi1[j] == Mi2[j] ) { //&& Mi2[j] == 255) {
+			if (Mi1[j] == Mi2[j]) { 
 				zgodnosc++;
 			}
-			//if (Mi1[j] == 255 && Mi2[j] == 0) {
-			//	zgodnosc--;
-			//}
 		}
 	}
 	return (float)zgodnosc / (float)(img1.rows * img1.cols);
@@ -59,20 +54,17 @@ float znajdzDopasownaie(Mat img1, Mat img2)
 
 
 
-std::string asdf[] = { "1", "2" };
 float detectRotation(Mat src) {
-	static int g = 0;
 	Mat dst, cdst;
+
 	Canny(src, dst, 50, 200, 3);
-	//imshow("canny", dst);
 	cvtColor(dst, cdst, CV_GRAY2BGR);
 
-	float finalAngle = 0;
+	//float finalAngle = 0;
 	float finalAngle2 = 0;
-	float finalAngleX = 0;
-	float finalAngleY = 0;
+	//float finalAngleX = 0;
+	//float finalAngleY = 0;
 
-#if 1
 	std::vector<Vec2f> lines;
 	HoughLines(dst, lines, 1, CV_PI / 180, 40, 0, 0);
 
@@ -86,27 +78,14 @@ float detectRotation(Mat src) {
 		pt1.y = cvRound(y0 + 1000 * (a));
 		pt2.x = cvRound(x0 - 1000 * (-b));
 		pt2.y = cvRound(y0 - 1000 * (a));
-		finalAngle += ((float)pt1.x - (float)pt2.x) / ((float)pt1.y - (float)pt2.y);
-		finalAngleX = (float)pt1.x - (float)pt2.x;
-		finalAngleY = (float)pt1.y - (float)pt2.y;
-		//finalAngle2 += cvFastArctan(finalAngleY, finalAngleX) ;
-		finalAngle2 += atanf(((float)pt1.y - (float)pt2.y) / ((float)pt1.x - (float)pt2.x)) * 180 / 3.4169 ;
+	//	finalAngle += ((float)pt1.x - (float)pt2.x) / ((float)pt1.y - (float)pt2.y);
+	//	finalAngleX = (float)pt1.x - (float)pt2.x;
+	//	finalAngleY = (float)pt1.y - (float)pt2.y;
+		finalAngle2 += atanf(((float)pt1.y - (float)pt2.y) / ((float)pt1.x - (float)pt2.x)) * 180 / 3.4169;
 		line(cdst, pt1, pt2, Scalar(0, 0, 255), 3, CV_AA);
 	}
-#else
-	std::vector<Vec4i> lines;
-	HoughLinesP(dst, lines, 1, CV_PI / 180, 50, 10, 10);
-	for (size_t i = 0; i < lines.size(); i++)
-	{
-		Vec4i l = lines[i];
-		line(cdst, Point(l[0], l[1]), Point(l[2], l[3]), Scalar(0, 0, 255), 3, CV_AA);
-	}
-#endif
-//	std::cout << "FINAL ANGLE:   " << (float)finalAngle / (float)lines.size() << std::endl;
-	float angleOut = cvFastArctan((float)finalAngle / (float)lines.size(), 1.0f);
-//	std::cout << "ANGLE OUT:     " << finalAngle2/8.0f << std::endl;
-	//imshow(asdf[g], cdst);
-	g++;
+
+	//float angleOut = cvFastArctan((float)finalAngle / (float)lines.size(), 1.0f);
 	return finalAngle2 / 8.0f;
 }
 
@@ -119,7 +98,7 @@ void roznice(Mat img1, Mat img2) {
 		auto Mi3 = out.ptr<unsigned char>(i);
 		for (int j = 0; j < img1.cols; j++) {
 			auto o = Mi1[j] + Mi2[j];
-			Mi1[j] = o /2;
+			Mi1[j] = o / 2;
 		}
 	}
 	imshow("ROZNICE", img1);
@@ -137,16 +116,13 @@ Mat scaleImg(Mat img, float scale) {
 	bot = bRows - img.rows - top;
 	left = (bCols - img.cols) / 2;
 	right = bCols - img.cols - left;
-//	std::cout << top << "   " << bot << "  " << left << "    " << right << std::endl;
 	copyMakeBorder(img, img, top, bot, left, right, BORDER_CONSTANT);
-	//imshow("rotacja+skalowanie", dst);
-	//std::cout << translation.x << "       " << translation.y << std::endl;
 	return img;
 }
+
 void translateImg(Mat img, vec2 vec) {
 	Mat trans_mat = (Mat_<double>(2, 3) << 1, 0, vec.x, 0, 1, vec.y);
 	warpAffine(img, img, trans_mat, img.size());
-	//return trans_mat;
 }
 
 Mat rotateImgR(Mat img, vec2 point, float angle)
