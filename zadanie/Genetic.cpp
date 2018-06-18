@@ -26,7 +26,7 @@ void Genetic::evaluate(unsigned int iteration)
 	history[iteration % 20] = max;
 	if (population[index].evaluation > best.evaluation)
 		best = population[index];
-	std::cout << "SREDNIA:   " << sum / amount << std::endl;
+	std::cout << "SREDNIA:    " << sum / amount << std::endl;
 }
 
 void Genetic::mutate()

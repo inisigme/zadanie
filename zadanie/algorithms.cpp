@@ -56,18 +56,11 @@ float znajdzDopasownaie(Mat img1, Mat img2)
 
 float detectRotation(Mat src) {
 	Mat dst, cdst;
-
 	Canny(src, dst, 50, 200, 3);
 	cvtColor(dst, cdst, CV_GRAY2BGR);
-
-	//float finalAngle = 0;
-	float finalAngle2 = 0;
-	//float finalAngleX = 0;
-	//float finalAngleY = 0;
-
+	float finalAngle = 0;
 	std::vector<Vec2f> lines;
 	HoughLines(dst, lines, 1, CV_PI / 180, 40, 0, 0);
-
 	for (size_t i = 0; i < lines.size() && i < 8; i++)
 	{
 		float rho = lines[i][0], theta = lines[i][1];
@@ -78,15 +71,10 @@ float detectRotation(Mat src) {
 		pt1.y = cvRound(y0 + 1000 * (a));
 		pt2.x = cvRound(x0 - 1000 * (-b));
 		pt2.y = cvRound(y0 - 1000 * (a));
-	//	finalAngle += ((float)pt1.x - (float)pt2.x) / ((float)pt1.y - (float)pt2.y);
-	//	finalAngleX = (float)pt1.x - (float)pt2.x;
-	//	finalAngleY = (float)pt1.y - (float)pt2.y;
-		finalAngle2 += atanf(((float)pt1.y - (float)pt2.y) / ((float)pt1.x - (float)pt2.x)) * 180 / 3.4169;
+		finalAngle += atanf(((float)pt1.y - (float)pt2.y) / ((float)pt1.x - (float)pt2.x)) * 180 / 3.4169;
 		line(cdst, pt1, pt2, Scalar(0, 0, 255), 3, CV_AA);
 	}
-
-	//float angleOut = cvFastArctan((float)finalAngle / (float)lines.size(), 1.0f);
-	return finalAngle2 / 8.0f;
+	return finalAngle / 8.0f;
 }
 
 void roznice(Mat img1, Mat img2) {
@@ -103,9 +91,6 @@ void roznice(Mat img1, Mat img2) {
 	}
 	imshow("ROZNICE", img1);
 }
-
-
-
 
 Mat scaleImg(Mat img, float scale) {
 	auto bRows = img.rows;
@@ -133,9 +118,6 @@ Mat rotateImgR(Mat img, vec2 point, float angle)
 	cv::warpAffine(img, dst, r, img.size());
 	return dst;
 }
-
-
-
 
 void rozniceKolorowany(Mat img1, Mat img2, Mat out) {
 	for (int i = 0; i < img1.rows; i++)
