@@ -3,6 +3,9 @@
 #include <time.h>
 #include <limits.h>
 #include "algorithms.h"
+#include <thread>
+#include <algorithm>
+#include <functional>
 
 typedef struct genom {
 	int offsetX, offsetY;
@@ -14,8 +17,8 @@ typedef struct genom {
 class Genetic
 {
 public:
-	const unsigned int pupulationSize = 20;
 	const unsigned int iterations = 60;
+	const unsigned int pupulationSize = 100;
 	std::vector<genom> population = std::vector<genom>(pupulationSize);
 	Mat basicImage;
 	Mat toCompare;
@@ -37,6 +40,7 @@ public:
 	void displayBest();
 	void mainLoop();
 	void initPopulation();
+	void update(unsigned int startIndex, unsigned int step);
 
 	Genetic(Mat basicImage, Mat toCompare);
 	~Genetic();

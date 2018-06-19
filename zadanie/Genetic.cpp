@@ -9,12 +9,12 @@ void Genetic::evaluate(unsigned int iteration)
 	unsigned int index = 0;
 	float max = -1.0;
 	for (unsigned int i = 0; i < pupulationSize; i++) {
-		vec2 translation = { population[i].offsetX, population[i].offsetY };
-		Mat dst(basicImage);
-		dst = scaleImg(dst, population[i].scale);
-		dst = rotateImgR(dst, detectLocation(dst), population[i].angle);
-		translateImg(dst, translation);
-		population[i].evaluation = znajdzDopasownaie(dst, toCompare);
+		//vec2 translation = { population[i].offsetX, population[i].offsetY };
+		//Mat dst(basicImage);
+		//dst = scaleImg(dst, population[i].scale);
+		//dst = rotateImgR(dst, detectLocation(dst), population[i].angle);
+		//translateImg(dst, translation);
+		//population[i].evaluation = znajdzDopasownaie(dst, toCompare);
 		sum += population[i].evaluation;
 		amount++;
 		if (population[i].evaluation > max) {
@@ -42,7 +42,7 @@ void Genetic::mutate()
 			one.scale += ((float)rand() / (float)RAND_MAX - 0.5f) / 30.0f;
 			one.scale = one.scale > scaleMax ? scaleMax : one.scale;
 			one.scale = one.scale < scaleMin ? scaleMin : one.scale;
-			one.angle += ((float)rand() / (float)RAND_MAX - 0.5f);
+			one.angle += ((float)rand() / (float)RAND_MAX - 0.5f)*4.0f;
 			one.angle = one.angle > angleMax ? angleMax : one.angle;
 			one.angle = one.angle < angleMin ? angleMin : one.angle;
 		}
@@ -159,27 +159,71 @@ void Genetic::initPopulation() {
 	}
 }
 
+void Genetic::update(unsigned int startIndex, unsigned int step)
+{
+	for (unsigned int i = startIndex; i < pupulationSize; i += step) {
+	//for (unsigned int i = 0; i < pupulationSize; i += 1) {
+		vec2 translation = { population[i].offsetX, population[i].offsetY };
+		Mat dst(basicImage);
+		dst = scaleImg(dst, population[i].scale);
+		dst = rotateImgR(dst, detectLocation(dst), population[i].angle);
+		translateImg(dst, translation);
+		population[i].evaluation = znajdzDopasownaie(dst, toCompare);
+	}
+}
+
+
+void updateV2(Genetic g, unsigned int startIndex, unsigned int step)
+{
+	for (unsigned int i = startIndex; i < g.pupulationSize; i += step) {
+		vec2 translation = { g.population[i].offsetX, g.population[i].offsetY };
+		Mat dst(g.basicImage);
+		dst = scaleImg(dst, g.population[i].scale);
+		dst = rotateImgR(dst, detectLocation(dst), g.population[i].angle);
+		translateImg(dst, translation);
+		g.population[i].evaluation = znajdzDopasownaie(dst, g.toCompare);
+	}
+}
+
 void Genetic::mainLoop()
 {
+	initPopulation();
 	for (unsigned int i = 0; i < iterations; i++) {
-		std::cout << "iteracja:   " << i << std::endl;
-		memcpy(&population[0], &best, sizeof(best));
-		if (actual - history[i % 20] < 0.01 && best.evaluation < 0.95 && i > 19) {
+
+		if (actual - history[i % 20] < 0.01 && best.evaluation < 0.95 && i > 14) {
 			for (auto o : history) o = 0;
 			initPopulation();
 			i = 0;
 			best.evaluation = -1.0;
 		}
+
 		selection();
 		crossV2();
 		mutate();
+
+		std::thread t1(&Genetic::update, this, 0, 4);
+		std::thread t2(&Genetic::update, this, 1, 4);
+		std::thread t3(&Genetic::update, this, 2, 4);
+		std::thread t4(&Genetic::update, this, 3, 4);
+		t1.join();
+		t2.join();
+		t3.join();
+		t4.join();
+
+
 		evaluate(i);
 		displayBest();
 		cvWaitKey(1);
+
+		std::cout << "iteracja:   " << i << std::endl;
+		memcpy(&population[0], &best, sizeof(best));
+
 	}
 }
 
 
 Genetic::~Genetic()
 {
+	getchar();
+	std::cout << "ASD QWDQWIODM IOQWM\n dqwidowidjoiawnd" << std::endl;
 }

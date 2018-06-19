@@ -24,10 +24,10 @@
     <ClInclude Include="algorithms.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="conf.h">
+    <ClInclude Include="Genetic.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Genetic.h">
+    <ClInclude Include="SimpleWay.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -42,6 +42,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Genetic.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SimpleWay.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
