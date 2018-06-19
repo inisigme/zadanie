@@ -43,7 +43,7 @@ float znajdzDopasownaie(Mat img1, Mat img2)
 		auto Mi1 = img1.ptr<unsigned char>(i);
 		auto Mi2 = img2.ptr<unsigned char>(i);
 		for (int j = 0; j < img1.cols; j++) {
-			if (Mi1[j] == Mi2[j]) { 
+			if (Mi1[j] == Mi2[j]) {
 				zgodnosc++;
 			}
 		}

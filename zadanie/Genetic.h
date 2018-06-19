@@ -23,7 +23,7 @@ public:
 	Mat basicImage;
 	Mat toCompare;
 	genom best;
-	float history[20] = {20};
+	float history[20] = { 20 };
 	float actual;
 	float scaleMin = 0.7;
 	float scaleMax = 0.99;
@@ -31,7 +31,7 @@ public:
 	int offsetMax = 100;
 	float angleMin = -45.0f;
 	float angleMax = 45.0f;
-	
+
 	void evaluate(unsigned int);
 	void mutate();
 	void selection();
