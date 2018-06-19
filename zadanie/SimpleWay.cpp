@@ -18,7 +18,7 @@ void simpleWay(Mat img1, Mat img2)
 
 	p1 = detectLocation(dst);
 	p2 = detectLocation(img2);
-	translation = { p2.y - p1.y - 3, p2.x - p1.x - 1 };
+	translation = { round(p2.y - p1.y), round(p2.x - p1.x) };
 	translateImg(dst, translation);
 
 	std::cout << "translation:   " << translation.x << "," << translation.y << std::endl;
