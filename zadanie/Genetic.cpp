@@ -9,12 +9,6 @@ void Genetic::evaluate(unsigned int iteration)
 	unsigned int index = 0;
 	float max = -1.0;
 	for (unsigned int i = 0; i < pupulationSize; i++) {
-		//vec2 translation = { population[i].offsetX, population[i].offsetY };
-		//Mat dst(basicImage);
-		//dst = scaleImg(dst, population[i].scale);
-		//dst = rotateImgR(dst, detectLocation(dst), population[i].angle);
-		//translateImg(dst, translation);
-		//population[i].evaluation = znajdzDopasownaie(dst, toCompare);
 		sum += population[i].evaluation;
 		amount++;
 		if (population[i].evaluation > max) {
@@ -33,10 +27,10 @@ void Genetic::mutate()
 {
 	for (auto & one : population) {
 		if (rand() % 1 == 0) {
-			one.offsetX += rand() % 4 - 2;
-			one.offsetY += rand() % 4 - 2;
+			one.offsetX += rand() % 8 - 4;
 			one.offsetX = one.offsetX > offsetMax ? offsetMax : one.offsetX;
 			one.offsetX = one.offsetX < offsetMin ? offsetMin : one.offsetX;
+			one.offsetY += rand() % 8 - 4;
 			one.offsetY = one.offsetY > offsetMax ? offsetMax : one.offsetY;
 			one.offsetY = one.offsetY < offsetMin ? offsetMin : one.offsetY;
 			one.scale += ((float)rand() / (float)RAND_MAX - 0.5f) / 30.0f;
@@ -162,7 +156,6 @@ void Genetic::initPopulation() {
 void Genetic::update(unsigned int startIndex, unsigned int step)
 {
 	for (unsigned int i = startIndex; i < pupulationSize; i += step) {
-	//for (unsigned int i = 0; i < pupulationSize; i += 1) {
 		vec2 translation = { population[i].offsetX, population[i].offsetY };
 		Mat dst(basicImage);
 		dst = scaleImg(dst, population[i].scale);
@@ -224,6 +217,5 @@ void Genetic::mainLoop()
 
 Genetic::~Genetic()
 {
-	getchar();
-	std::cout << "ASD QWDQWIODM IOQWM\n dqwidowidjoiawnd" << std::endl;
+
 }

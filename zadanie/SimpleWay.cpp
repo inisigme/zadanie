@@ -36,8 +36,5 @@ void simpleWay(Mat img1, Mat img2)
 
 
 	std::cout << "DOPASOWANIE:   " << znajdzDopasownaie(dst, img2) << std::endl;
-	roznice(dst, img2);
 	cvWaitKey(1);
-	getchar();
-
 }
