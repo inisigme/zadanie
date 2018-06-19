@@ -214,6 +214,4 @@ void Genetic::mainLoop()
 
 Genetic::~Genetic()
 {
-	toCompare.~Mat();
-	basicImage.~Mat();
 }
