@@ -75,23 +75,19 @@ void Genetic::cross()
 	for (unsigned int i = 0; i < half; i += 2) {
 		toggle = (rand() % 2 == 0 ? 1 : 0);
 		population[i * 2].scale = population[i + toggle].scale;
-		toggle = toggle == 0 ? 0 : 1;
-		population[i * 2 + 1].scale = population[i + toggle].scale;
+		population[i * 2 + 1].scale = (population[i].scale + population[i + 1].scale)/2.0;
 
 		toggle = (rand() % 2 == 0 ? 1 : 0);
 		population[i * 2].offsetX = population[i + toggle].offsetX;
-		toggle = toggle == 0 ? 0 : 1;
-		population[i * 2 + 1].offsetX = population[i + toggle].offsetX;
+		population[i * 2 + 1].offsetX = (population[i].offsetX + population[i + 1].offsetX) / 2.0;
 
 		toggle = (rand() % 2 == 0 ? 1 : 0);
 		population[i * 2].offsetY = population[i + toggle].offsetY;
-		toggle = toggle == 0 ? 0 : 1;
-		population[i * 2 + 1].offsetY = population[i + toggle].offsetY;
+		population[i * 2 + 1].offsetY = (population[i].offsetY + population[i + 1].offsetY) / 2.0;
 
 		toggle = (rand() % 2 == 0 ? 1 : 0);
 		population[i * 2].angle = population[i + toggle].angle;
-		toggle = toggle == 0 ? 0 : 1;
-		population[i * 2 + 1].angle = population[i + toggle].angle;
+		population[i * 2 + 1].angle = (population[i].angle + population[i + 1].angle) / 2.0;
 	}
 }
 
@@ -119,7 +115,7 @@ void Genetic::crossV2() {
 
 void Genetic::displayBest()
 {
-	vec2 translation = { best.offsetX, best.offsetY };
+	vec2 translation { best.offsetX, best.offsetY };
 	Mat dst(basicImage);
 	dst = scaleImg(dst, best.scale);
 	dst = rotateImgR(dst, detectLocation(dst), best.angle);
@@ -195,7 +191,7 @@ void Genetic::mainLoop()
 		selection();
 		crossV2();
 		mutate();
-		// nawet tablica threadow nie chciala dzialac wiec musi byc tak, chyba wina windowsa  ¯\_(?)_/¯
+		// nawet tablica threadow nie chciala dzialac wiec musi byc tak, chyba wina windowsa 
 		std::thread t1(&Genetic::update, this, 0, 4);
 		std::thread t2(&Genetic::update, this, 1, 4);
 		std::thread t3(&Genetic::update, this, 2, 4);
