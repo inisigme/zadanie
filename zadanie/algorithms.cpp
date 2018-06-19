@@ -53,7 +53,6 @@ float znajdzDopasownaie(Mat img1, Mat img2)
 
 
 
-
 float detectRotation(Mat src) {
 	Mat dst, cdst;
 	Canny(src, dst, 50, 200, 3);
@@ -71,7 +70,7 @@ float detectRotation(Mat src) {
 		pt1.y = cvRound(y0 + 1000 * (a));
 		pt2.x = cvRound(x0 - 1000 * (-b));
 		pt2.y = cvRound(y0 - 1000 * (a));
-		finalAngle += atanf(((float)pt1.y - (float)pt2.y) / ((float)pt1.x - (float)pt2.x)) * 180 / 3.4169;
+		finalAngle += atanf(((float)pt1.y - (float)pt2.y) / ((float)pt1.x - (float)pt2.x)) * 180 / 3.141592;
 		line(cdst, pt1, pt2, Scalar(0, 0, 255), 3, CV_AA);
 	}
 	return finalAngle / 8.0f;

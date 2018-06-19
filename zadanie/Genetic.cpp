@@ -180,8 +180,10 @@ void updateV2(Genetic g, unsigned int startIndex, unsigned int step)
 
 void Genetic::mainLoop()
 {
-	initPopulation();
 	for (unsigned int i = 0; i < iterations; i++) {
+
+		std::cout << "iteracja:   " << i << std::endl;
+		memcpy(&population[0], &best, sizeof(best));
 
 		if (actual - history[i % 20] < 0.01 && best.evaluation < 0.95 && i > 14) {
 			for (auto o : history) o = 0;
@@ -193,7 +195,7 @@ void Genetic::mainLoop()
 		selection();
 		crossV2();
 		mutate();
-
+		// nawet tablica threadow nie chciala dzialac wiec musi byc tak, chyba wina windowsa  ¯\_(?)_/¯
 		std::thread t1(&Genetic::update, this, 0, 4);
 		std::thread t2(&Genetic::update, this, 1, 4);
 		std::thread t3(&Genetic::update, this, 2, 4);
@@ -203,19 +205,15 @@ void Genetic::mainLoop()
 		t3.join();
 		t4.join();
 
-
 		evaluate(i);
 		displayBest();
 		cvWaitKey(1);
-
-		std::cout << "iteracja:   " << i << std::endl;
-		memcpy(&population[0], &best, sizeof(best));
-
 	}
 }
 
 
 Genetic::~Genetic()
 {
-
+	toCompare.~Mat();
+	basicImage.~Mat();
 }
