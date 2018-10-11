@@ -2,7 +2,7 @@
 #include "stdafx.h"
 
 typedef struct vec2 {
-	float x, y, z;
+	float x, y, z, k;
 };
 
 vec2 findMiddle(Mat img);
